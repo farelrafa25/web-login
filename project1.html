@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Login Web</title>
   
   <style>
+    /* Kode CSS Anda di sini */
     * {
       margin: 0px;
       padding: 0px;
@@ -74,6 +75,75 @@
       background: #0056b3;
     }
   </style>
+</head>
+<body>
+  
+  <form class="form-box" action="/api/login" method="POST">
+    <h3>Login</h3>
+    
+    <input type="text" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    
+    <button type="submit">Masuk</button>
+  </form>
+
+  <script>
+    // Pastikan kode dijalankan setelah semua elemen dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.querySelector('.form-box');
+        const usernameInput = document.querySelector('input[name="username"]');
+        const passwordInput = document.querySelector('input[name="password"]');
+
+        loginForm.addEventListener('submit', function(event) {
+            // Menghentikan pengiriman formulir ke action="/api/login"
+            event.preventDefault(); 
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username === "" || password === "") {
+                alert("Username dan Password tidak boleh kosong!");
+                return;
+            }
+
+            // Memanggil fungsi utama untuk memproses login/registrasi
+            handleLogin(username, password);
+        });
+
+        function handleLogin(username, password) {
+            // Ambil data pengguna yang sudah tersimpan (kunci: 'user')
+            const storedUserJSON = localStorage.getItem('user');
+            
+            if (storedUserJSON) {
+                // --- PROSES LOGIN (Jika data sudah ada) ---
+                const storedUser = JSON.parse(storedUserJSON);
+
+                if (storedUser.username === username && storedUser.password === password) {
+                    alert(`Login Berhasil! Selamat datang, ${username}`);
+                    // Biasanya, kode akan mengarahkan ke halaman lain di sini
+                    // window.location.href = "dashboard.html";
+                } else {
+                    alert("Login Gagal! Username atau Password salah.");
+                }
+
+            } else {
+                // --- PROSES REGISTRASI/SIMPAN (Jika data belum ada) ---
+                const newUser = { username, password };
+                
+                // Menyimpan data ke Local Storage sebagai string JSON
+                localStorage.setItem('user', JSON.stringify(newUser));
+                
+                alert(`Registrasi Berhasil! Username ${username} tersimpan. Silakan login kembali dengan data yang sama.`);
+                
+                // Mengosongkan input
+                usernameInput.value = '';
+                passwordInput.value = '';
+            }
+        }
+    });
+</script>
+</body>
+</html>  </style>
 </head>
 <body>
   
